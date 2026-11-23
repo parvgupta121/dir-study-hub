@@ -1,5 +1,28 @@
 const STORE_KEY="dirStudyHub_v1";
 let state=loadState(), currentView="dashboard", currentChapter=null, practiceIndex=0, flashIndex=0, flashBack=false;
+const chapterStudyNotes={};
+async function loadChapterStudyNotes(){
+ try{
+  const response=await fetch("study-notes.html");
+  if(!response.ok)throw new Error("Study notes could not be loaded");
+  const html=await response.text(),doc=new DOMParser().parseFromString(html,"text/html");
+  doc.querySelectorAll(".chapter[id^='chapter-']").forEach(card=>{
+   const id=Number(card.id.replace("chapter-","")),pre=card.querySelector("pre");
+   if(!Number.isNaN(id)&&pre){
+    chapterStudyNotes[id]=pre.textContent
+     .replace(/<PARSED TEXT FOR PAGE: \\d+ \\/ \\d+>/g,"")
+     .replace(/Cultural Anthropology \\| End-Semester Notes\\s+Page \\d+/g,"")
+     .trim();
+   }
+  });
+  if(currentChapter)render();
+ }catch(error){
+  console.error("Chapter explanations unavailable:",error);
+  if(currentChapter)render();
+ }
+}
+loadChapterStudyNotes();
+
 function loadState(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{completed:{},notes:{},answers:{},resourceDone:{}}}catch(e){return{completed:{},notes:{},answers:{},resourceDone:{}}}}
 function save(){localStorage.setItem(STORE_KEY,JSON.stringify(state));}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -36,7 +59,8 @@ function openChapter(id){currentChapter=DIR_DATA.chapters.find(c=>c.id===id);doc
 function renderChapter(root,c){
  const resources=DIR_DATA.resources.filter(r=>r.chapter===c.id),cases=DIR_DATA.cases.filter(x=>x.chapter===c.id),pct=progress(c);
  root.innerHTML=`<div class="detail-header"><button class="back-btn" onclick="currentChapter=null;document.getElementById('crumb').textContent='Chapter library';render()">← Back to chapter library</button><div class="detail-title-row"><div><div class="eyebrow">CHAPTER ${String(c.id).padStart(2,"0")} • ${esc(c.group.toUpperCase())}</div><h1>${esc(c.title)}</h1><p>${esc(c.description)}</p></div><button class="secondary-btn" onclick="toast('${pct}% of this chapter completed')">${pct}% complete</button></div><div class="progress-track" style="margin-top:17px"><div class="progress-fill" style="width:${pct}%"></div></div></div>
- <div class="detail-layout"><div class="detail-main"><section class="content-panel"><h2>Topic checklist <span class="muted" style="font:400 10px 'DM Sans'"> • Tick as you study</span></h2><div class="topic-list">${c.topics.map((t,i)=>`<div class="topic-item"><input type="checkbox" id="topic${c.id}_${i}" ${state.completed[`${c.id}_${i}`]?"checked":""} onchange="toggleTopic(${c.id},${i},this.checked)"><label for="topic${c.id}_${i}">${esc(t)}<small>${state.completed[`${c.id}_${i}`]?"Completed":"Mark this topic as studied"}</small></label></div>`).join("")}</div></section>
+ <div class="detail-layout"><div class="detail-main"><section class="content-panel study-guide"><h2>Topic explanations</h2><p class="muted study-guide-intro">Study the concepts, meanings, examples and case connections from your uploaded syllabus notes here.</p><div class="study-note-content">${chapterStudyNotes[c.id]?'<pre class="study-note-text">'+esc(chapterStudyNotes[c.id])+'</pre>':'<p class="muted">Loading this chapter’s explanations…</p>'}</div></section>
+ <section class="content-panel"><h2>Topic checklist <span class="muted" style="font:400 10px 'DM Sans'"> • Tick as you study</span></h2><div class="topic-list">${c.topics.map((t,i)=>`<div class="topic-item"><input type="checkbox" id="topic${c.id}_${i}" ${state.completed[`${c.id}_${i}`]?"checked":""} onchange="toggleTopic(${c.id},${i},this.checked)"><label for="topic${c.id}_${i}">${esc(t)}<small>${state.completed[`${c.id}_${i}`]?"Completed":"Mark this topic as studied"}</small></label></div>`).join("")}</div></section>
  <section class="content-panel"><h2>My chapter notes</h2><p class="muted" style="font-size:11px;margin-top:-5px">Write definitions, examples, class explanations and doubts. Notes are saved automatically on this device.</p><textarea class="note-area" id="chapterNote" placeholder="Add your notes for ${esc(c.title)}…">${esc(state.notes[c.id]||"")}</textarea><div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="small-btn" onclick="saveNote(${c.id})">Save notes</button></div></section>
  ${cases.length?`<section class="content-panel"><h2>Cases and examples to connect</h2><div class="resource-list">${cases.map(x=>`<div class="resource-item"><div><strong>${esc(x.title)}</strong><small>${esc(x.focus)}</small></div></div>`).join("")}</div></section>`:""}
  ${resources.length?`<section class="content-panel"><h2>Faculty-provided resources</h2><div class="resource-list">${resources.map((r,i)=>resourceHTML(r,i)).join("")}</div></section>`:""}</div>
