@@ -10,8 +10,8 @@ async function loadChapterStudyNotes(){
    const id=Number(card.id.replace("chapter-","")),pre=card.querySelector("pre");
    if(!Number.isNaN(id)&&pre){
     chapterStudyNotes[id]=pre.textContent
-     .replace(/<PARSED TEXT FOR PAGE: \\d+ \\/ \\d+>/g,"")
-     .replace(/Cultural Anthropology \\| End-Semester Notes\\s+Page \\d+/g,"")
+     .replace(/<PARSED TEXT FOR PAGE: \d+ \/ \d+>/g,"")
+     .replace(/Cultural Anthropology \| End-Semester Notes\s+Page \d+/g,"")
      .trim();
    }
   });
