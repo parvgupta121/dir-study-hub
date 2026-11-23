@@ -47,3 +47,8 @@ Then visit `http://localhost:8000`.
 - Search within notes and flashcards
 - Add your own textbook summaries and class notes
 - Add an AI tutor via a secure backend (never place a private API key in public GitHub code)
+
+## Complete PDF study notes
+- Open `study-notes.html` from the dashboard to access searchable text for all 17 chapters of the uploaded Cultural Anthropology end-semester notes PDF.
+- Use the search box to find concepts and examples, or expand a chapter to read its complete extracted notes.
+- The notes page preserves the scope and source note from the uploaded PDF; use assigned class materials for details that the PDF itself says are not reproduced.
