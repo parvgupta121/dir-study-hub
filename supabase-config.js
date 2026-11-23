@@ -1,5 +1,6 @@
-// Supabase project settings. Replace both placeholders after creating your project.
+// Supabase project settings for DIR Study Hub.
+// The publishable key is intended for browser use; database access is protected by RLS.
 window.DIR_SUPABASE_CONFIG = {
-  url: "YOUR_SUPABASE_PROJECT_URL",
-  anonKey: "YOUR_SUPABASE_ANON_KEY"
+  url: "https://airbsomesflbotsfsxue.supabase.co",
+  anonKey: "sb_publishable_TiH1-wFSDdtxxvz-giT_hQ_1EYwebo8"
 };
