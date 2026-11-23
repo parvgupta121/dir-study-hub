@@ -37,13 +37,15 @@
       <header class="topbar">
         <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
         <div class="breadcrumb">Workspace <span>/</span> <strong id="crumb">Overview</strong></div>
-        <div class="top-actions"><span class="save-indicator"><i></i> Saved locally</span><button class="icon-btn" id="exportBtn" title="Export your progress">⇩</button></div>
+        <div class="top-actions"><span class="save-indicator" id="authStatus">Private progress</span><button class="secondary-btn" id="signInBtn" onclick="signIn()">Sign in</button><button class="secondary-btn" id="signOutBtn" onclick="signOut()" hidden>Sign out</button><button class="icon-btn" id="exportBtn" title="Export your progress">⇩</button></div>
       </header>
       <div class="content" id="content"></div>
-      <footer>DIR Study Hub <span>•</span> Built for your TAPMI learning journey <span>•</span> Your data stays in this browser</footer>
+      <footer>DIR Study Hub <span>•</span> Built for your TAPMI learning journey <span>•</span> Private progress • Public community notes</footer>
     </main>
   </div>
   <div class="toast" id="toast"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>
