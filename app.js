@@ -1,4 +1,5 @@
 const STORE_KEY="dirStudyHub_v1";
+const THEME_KEY="dirStudyHub_theme";
 let state=loadState(), currentView="dashboard", currentChapter=null, practiceIndex=0, flashIndex=0, flashBack=false;
 const chapterStudyNotes={};
 let sb=null,currentUser=null,communityNotes=[];
@@ -27,7 +28,6 @@ initTheme();
 initCloud();
 
 
-const THEME_KEY="dirStudyHub_theme";
 function initTheme(){
  const saved=localStorage.getItem(THEME_KEY);
  applyTheme(saved==="dark"?"dark":"light");
