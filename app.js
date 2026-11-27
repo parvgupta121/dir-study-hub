@@ -23,7 +23,28 @@ async function loadChapterStudyNotes(){
  }
 }
 loadChapterStudyNotes();
+initTheme();
 initCloud();
+
+
+const THEME_KEY="dirStudyHub_theme";
+function initTheme(){
+ const saved=localStorage.getItem(THEME_KEY);
+ applyTheme(saved==="dark"?"dark":"light");
+ const toggle=document.getElementById("themeToggle");
+ if(toggle)toggle.addEventListener("click",()=>{
+  const next=document.body.dataset.theme==="dark"?"light":"dark";
+  localStorage.setItem(THEME_KEY,next);
+  applyTheme(next);
+ });
+}
+function applyTheme(theme){
+ document.body.dataset.theme=theme;
+ const dark=theme==="dark",toggle=document.getElementById("themeToggle");
+ if(toggle){toggle.textContent=dark?"☀ Normal mode":"☾ Dark mode";toggle.setAttribute("aria-label",dark?"Switch to normal mode":"Switch to dark mode");}
+ const meta=document.querySelector('meta[name="theme-color"]');
+ if(meta)meta.content=dark?"#111827":"#101827";
+}
 
 function loadState(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{completed:{},notes:{},answers:{},resourceDone:{}}}catch(e){return{completed:{},notes:{},answers:{},resourceDone:{}}}}
 
