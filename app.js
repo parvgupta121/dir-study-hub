@@ -23,9 +23,6 @@ async function loadChapterStudyNotes(){
   if(currentChapter)render();
  }
 }
-loadChapterStudyNotes();
-initTheme();
-initCloud();
 
 
 function initTheme(){
@@ -163,3 +160,6 @@ function renderRevision(root){root.innerHTML=`<div class="eyebrow">RECALL • RE
 function flipFlash(){flashBack=!flashBack;document.getElementById("flashLabel").textContent=flashBack?"EXPLANATION":`TERM • ${flashIndex+1} / ${FLASH.length}`;document.getElementById("flashTerm").textContent=flashBack?FLASH[flashIndex][1]:FLASH[flashIndex][0];document.getElementById("flashDesc").textContent=flashBack?"Click to return to the term.":"Click the card to reveal the explanation."}
 function moveFlash(n){flashIndex=(flashIndex+n+FLASH.length)%FLASH.length;flashBack=false;document.getElementById("flashLabel").textContent=`TERM • ${flashIndex+1} / ${FLASH.length}`;document.getElementById("flashTerm").textContent=FLASH[flashIndex][0];document.getElementById("flashDesc").textContent="Click the card to reveal the explanation."}
 render();
+loadChapterStudyNotes();
+initTheme();
+initCloud();
